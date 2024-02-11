@@ -1,22 +1,19 @@
 #!/bin/sh
 
-lookup_email=$INPUT_LOOKUP_EMAIL
-echo "lookup-email input parameter: $lookup_email"
-okta_endpoint=$INPUT_OKTA_ENDPOINT
-echo "okta-endpoint input parameter: $okta_endpoint"
-okta_token=$INPUT_OKTA_TOKEN
+echo "Lookup email input parameter: $LOOKUP_EMAIL"
+echo "Okta endpoint input parameter: $OKTA_ENDPOINT"
 
 OUT_FILE=okta-response-output.json
 RETRIES=3
-MAX_TIME=60s
+MAX_TIME=20
 http_response_code=$(curl -s \
   --retry $RETRIES \
   --max-time $MAX_TIME \
-  -H "Authorization: SSWS $okta_token" \
+  -H "Authorization: SSWS $OKTA_TOKEN" \
   -H 'Accept: application/json' \
   -H 'Content-Type: application/json; okta-response=omitCredentials,omitCredentialsLinks,omitTransitioningToStatus' \
-  --data-urlencode "search=profile.email eq $lookup_email and status eq ACTIVE" \
-  "https://$okta_endpoint/api/v1/users" \
+  --data-urlencode "search=profile.email eq $LOOKUP_EMAIL and status eq ACTIVE" \
+  "https://$OKTA_ENDPOINT/api/v1/users" \
   -o $OUT_FILE \
   -w "%{http_code}" \
 )
@@ -31,7 +28,7 @@ if [ $http_response_code -eq 200 ]; then
   # Check if the file contains exactly one item in the array and that item has the property "profile"
   has_one_profile=$(jq '[length == 1] and .[0] | has("profile")' "$OUT_FILE")
   if [ "$has_one_profile" = "true" ]; then
-      profile=$(jq '.[0].profile "$OUT_FILE")
+      profile=$(jq '.[0].profile' "$OUT_FILE")
       echo "okta-profile-info=$profile" >> $GITHUB_OUTPUT
       exit 0
   else

@@ -15,5 +15,7 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.lookup-email }}
+  env:
+    LOOKUP_EMAIL: ${{ inputs.lookup-email }}
+    OKTA_TOKEN: ${{ inputs.okta-token }}
+    OKTA_ENDPOINT: ${{ inputs.okta-endpoint }}

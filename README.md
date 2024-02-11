@@ -1,20 +1,22 @@
 # Okta user lookup action
 
-Lookup the Okta profile info providing the email
+Lookup the Okta profile info providing the email.
+
+The API used is the [`Okta list-users`](https://developer.okta.com/docs/reference/api/users/#list-users).
 
 ## Inputs
 
 ## `lookup-email`
 
-**Required** The name of the person to greet.
+**Required** The name of the user to lookup in Okta.
 
 ## `okta-token`
 
-**Required** The Okta token to access the API.
+**Required** The Okta token (`SSWS`) to access the API.
 
 ## `okta-endpoint`
 
-**Required** The Okta endpoint to access the API.
+**Required** The Okta endpoint (e.g. `yourcompany.okta.com`) to access the API.
 
 ## Outputs
 
