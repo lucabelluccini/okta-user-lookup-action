@@ -1,0 +1,19 @@
+name: 'Okta User Lookup'
+description: 'Lookup the Okta profile info providing the email'
+inputs:
+  lookup-email:
+    description: 'Email of the user to lookup'
+    required: true
+  okta-token: 'Okta token to be used for the lookup'
+    required: true
+  okta-endpoint: 'Okta endpoint to be used for the lookup'
+    required: true
+outputs:
+  okta-profile-info:
+    description: 'The details of the user, if found'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.lookup-email }}
